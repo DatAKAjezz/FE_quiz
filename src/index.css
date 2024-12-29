@@ -1,3 +1,24 @@
-*{
-    font-family: 'JetBrains Mono', monospace;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.custom-menu-li {
+  @apply flex items-center align-middle box-content pl-5 
+        overflow-hidden text-base my-5 cursor-pointer w-56 whitespace-nowrap
+         hover:text-red-700 transition-all duration-200 ease-out;
+}
+
+.menu-item-label {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 200ms ease-in-out, visibility 0s 200ms;
+}
+
+.menu-item-label.open {
+  opacity: 1;
+  visibility: visible;
 }
