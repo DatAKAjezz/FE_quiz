@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  font-family: 'JetBrains Mono', monospace;
-}
-
 .custom-menu-li {
   @apply flex items-center align-middle box-content pl-5 
         overflow-hidden text-base my-5 cursor-pointer w-56 whitespace-nowrap
@@ -15,10 +11,29 @@
 .menu-item-label {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 200ms ease-in-out, visibility 0s 200ms;
+  transition: opacity 150ms ease-in-out, visibility 0s 200ms ease-in;
 }
 
 .menu-item-label.open {
   opacity: 1;
   visibility: visible;
 }
+
+@font-face {
+  font-family: 'HurmeNo2';
+  src: url('/src/fonts/HurmeGeometricSans2-SemiBold.woff2') format('woff2'),
+       url('/src/fonts/HurmeGeometricSans2-SemiBold.woff') format('woff'),
+       url('/src/fonts/HurmeGeometricSans2-SemiBold.tff') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+* {
+  font-family: 'HurmeNo2', monospace;
+}
+
+body{
+    background-color: rgb(29, 28, 49);
+}
+

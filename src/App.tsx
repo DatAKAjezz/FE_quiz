@@ -1,10 +1,12 @@
-import Header from "./components/Header";
+import { RouterProvider } from "react-router-dom";
+import routes from "./router/routes";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   return (
-    <div className = 'text-xl'>
-      <Header/>
-    </div>
+    <AuthProvider>
+      <RouterProvider router={routes}/>
+    </AuthProvider>
   );
 };
 
