@@ -32,8 +32,10 @@ export const Dashboard = () => {
     }, [navigate])
     
     return (
-        <div className='bg-slate-700'>
-            <div>Dashboard</div>
+        <div>
+            <div className='w-full h-full rounded-sm bg-slate-700'>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit quidem ducimus nostrum in eos, voluptas odio temporibus sunt accusantium inventore ratione exercitationem dolorem sed ad, amet architecto, explicabo rerum labore!
+            </div>
             <p>{message}</p>
         </div>
     )

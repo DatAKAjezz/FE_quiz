@@ -27,7 +27,7 @@ const Header = () => {
     { icon: <RiHome9Line className="text-2xl icon" />, label: 'Trang chủ', path: '/' },
     { icon: <FaRegFolderOpen className="icon text-2xl " />, label: 'Thư viện', path: '/library' },
     { icon: <FaRegBell className="icon text-2xl " />, label: 'Thông báo', path: '/inform' },
-    { icon: <RiFilePaperLine className="icon text-2xl " />, label: 'Thẻ ghi nhớ' },
+    { icon: <RiFilePaperLine className="icon text-2xl " />, label: 'Thẻ ghi nhớ'},
     { icon: <TbCategory className="icon text-2xl " />, label: 'Lời giải chuyên gia' },
     { icon: <GoReport className="icon text-2xl " />, label: 'Báo cáo' },
     { icon: <FiSettings className="icon text-2xl " />, label: 'Cài đặt' },
@@ -68,9 +68,9 @@ const Header = () => {
 
   return (
     <>
-      <div className='flex items-center justify-between absolute top-0 z-10 bg-gray-800 w-full py-3 px-6'>
+      <div className='flex items-center justify-between absolute top-0 z-10 bg-gray-800 w-full py-3 px-5'>
         <HiMenu
-          className="text-4xl cursor-pointer text-white"
+          className="text-4xl cursor-pointer text-white "
           onClick={() => setIsOpened(prev => !prev)}
         />
         {token && (
@@ -83,6 +83,9 @@ const Header = () => {
               <FaRegUserCircle className="icon text-4xl" />
             </div>
 
+          {/* MARK: user 
+           */}
+
             {isListOpened && (
               <ul
                 ref={menuRef}
@@ -90,7 +93,8 @@ const Header = () => {
                 className='text-white w-fit absolute right-5 top-16 rounded-md overflow-hidden'
                 style={{ border: '1px solid white' }}
               >
-                <li className='hover:bg-slate-600 bg-slate-800 whitespace-nowrap px-16 py-5 flex items-center align-middle'
+                <li onClick={() => {navigate('/dashboard')}}
+                  className='hover:bg-slate-600 bg-slate-800 whitespace-nowrap px-16 py-5 flex items-center align-middle'
                   style={{ borderBottom: '1px solid white' }}>
                   <FaRegUserCircle className="icon text-2xl" />
                   <p className='pl-4'>{user.username}</p>
@@ -121,6 +125,10 @@ const Header = () => {
         )}
       </div>
 
+      
+      {/* MARK: menu 
+        */}
+
       <div className="relative h-screen box-border">
         <div
           className='font-bold pt-16 absolute text-base flex flex-col justify-between 
@@ -131,6 +139,7 @@ const Header = () => {
             <ul>
               {menuItems.slice(0, 3).map((item, index) => (
                 <li
+                  onClick={() => {navigate(item.path + '')}} 
                   key={index}
                   className="flex w-fit flex-row items-center mb-6 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
                 >
@@ -148,6 +157,7 @@ const Header = () => {
             <ul>
               {menuItems.slice(3, 5).map((item, index) => (
                 <li
+                 onClick={() => {navigate(item.path + '')}} 
                   key={index}
                   className="flex w-fit flex-row items-center mb-6 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
                 >
@@ -167,6 +177,7 @@ const Header = () => {
             <ul>
               {menuItems.slice(5, 7).map((item, index) => (
                 <li
+                  onClick={() => {navigate(item.path + '')}} 
                   key={index}
                   className="flex w-fit flex-row items-center mb-6 cursor-pointer hover:bg-gray-700 p-2 rounded-md"
                 >
