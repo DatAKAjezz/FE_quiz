@@ -21,7 +21,7 @@ export const Dashboard = () => {
             return response.json();
         })
         .then(data => {
-                setMessage(data.message)
+                localStorage.setItem('user', JSON.stringify(data.message))
                 console.log("dang nhap thanh cong")
             })
         .catch(() => {
