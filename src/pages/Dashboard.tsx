@@ -8,35 +8,46 @@ export const Dashboard = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (!token){
+        if (!token) {
             alert('Bạn cần đăng nhập để truy cập DASHBOARD!');
-            navigate('login');
+            navigate('/login');  // Thêm dấu / trước login
             return;
         }
+    
         fetch('http://localhost:3001/dashboard', {
-            headers: {Authorization: `Bearer ${token}`},
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json'
+            },
         })
         .then(response => {
-            if (!response.ok) throw new Error("Unauthorized")
+            if (!response.ok) throw new Error("Unauthorized");
             return response.json();
         })
         .then(data => {
-                localStorage.setItem('user', JSON.stringify(data.message))
-                console.log("dang nhap thanh cong")
-            })
-        .catch(() => {
-            alert('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.')
+            if (data.success) {
+                localStorage.setItem('user', JSON.stringify(data.data));
+                setMessage(JSON.stringify(data.data)); // Hiển thị data
+                console.log("Đăng nhập thành công\nUser Data:", data.data);
+            } else {
+                throw new Error(data.message);
+            }
+        })
+        .catch((error) => {
+            alert('Có lỗi xảy ra: ' + error.message);
             localStorage.removeItem('token');
             navigate('/login');
-        })   
-    }, [navigate])
+        });
+    }, [navigate]);
     
     return (
-        <div>
-            <div className='w-full h-full rounded-sm bg-slate-700'>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit quidem ducimus nostrum in eos, voluptas odio temporibus sunt accusantium inventore ratione exercitationem dolorem sed ad, amet architecto, explicabo rerum labore!
-            </div>
-            <p>{message}</p>
+        <div className='w-full h-full rounded-sm bg-slate-800'>
+
+            <ul>
+                <li></li>
+            </ul>
+
         </div>
     )
 }
