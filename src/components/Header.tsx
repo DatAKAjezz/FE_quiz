@@ -24,7 +24,7 @@ const Header = () => {
 
   const user = JSON.parse(localStorage.getItem('user') ?? '{}');
 
-  // useEffect(() => {console.log("User header: ", user)}, [user])
+  // useEffect(() => {console.log("User header: ", user[0])}, [user])
 
   const menuItems = [
     { icon: <RiHome9Line className="text-2xl icon" />, label: 'Trang chủ', path: '/' },
@@ -86,7 +86,7 @@ const Header = () => {
                 ref={userIconRef}
                 onClick={handleUserIconClick}
               >
-                <img className='hover:scale-110 transition-all duration-200 ease-in-out' src={user.avatar_url}></img>
+                <img className='hover:scale-110 transition-all duration-200 ease-in-out' src={user[0].avatar_url} alt='avatar'></img>
               </div>
             </div>
 
@@ -104,10 +104,10 @@ const Header = () => {
                   className='hover:bg-slate-600 bg-slate-800 whitespace-nowrap px-16 py-5 flex items-center align-middle'
                   style={{ borderBottom: '1px solid white' }}>
                   <img className='w-10 rounded-full h-10 hover:scale-110 transition-all duration-200 ease-in-out'
-                    src={user.avatar_url}>
+                    src={user[0].avatar_url}>
                   </img>
 
-                  <p className='pl-4'>{user.username}</p>
+                  <p className='pl-4'>{user[0].username}</p>
                 </li>
 
                 {menuItems.slice(6, 8).map((item, index) => (
@@ -195,7 +195,7 @@ const Header = () => {
                   <p
                     style={{ whiteSpace: 'nowrap' }}
                     className={`ml-4 w-fit transition-all duration-300 ${isOpened ? 'inline-block' : 'hidden'}`}
-                  >
+                  > 
                     {item.label}
                   </p>
                 </li>

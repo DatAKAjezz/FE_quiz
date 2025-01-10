@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { HiMiniXMark } from 'react-icons/hi2';
@@ -24,12 +25,12 @@ export const Login = () => {
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         try{
-            const response = await fetch('http://localhost:3001/login',{
-                method: 'POST',
+            const response = await axios.post('http://localhost:3001/login',formData,
+            {
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(formData)
             })
-            const result = await response.json();
+
+            const result = response.data;
 
             if (result.success){
                 alert('Dang nhap thanh cong!')
