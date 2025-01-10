@@ -1,30 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchLibraryData } from '../../services/API.ts'
+import { LibraryNav } from '../../components/LibraryNav.tsx';
 
 export const Library = () => {
 
-  const [activeOption, setActiveOption] = useState<number>(0);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState<any[]>([]);
 
-  const menuItems = [
-    {
-      id: 'hocphan',
-      label: 'Học phần',
-    },
-    {
-      id: 'loigiaichuyengia',
-      label: 'Lời giải chuyên gia',
-    },
-    {
-      id: 'thumuc',
-      label: 'Thư mục',
-    },
-    {
-      id: 'lophoc',
-      label: 'Lớp học'
-    }
-  ];
+
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
@@ -51,31 +34,11 @@ export const Library = () => {
 
   }, [token])
 
-  const options = ['Gần đây', 'Đã tạo', 'Yêu thích'];
+  // const options = ['Gần đây', 'Đã tạo', 'Yêu thích'];
 
   return (
     <div className="w-full h-full bg-slate-800 text-white px-5">
-      <nav className="border-b border-gray-500">
-        <ul className="flex space-x-6 px-4 py-2 text-[15px] font-semibold">
-          {menuItems.map((item, index) => (
-            <li key={item.id}
-              onClick={() => { setActiveOption(index) }}
-            >
-
-              <a href={`#${item.id}`}
-                className={`hover:text-purple-400 ${index == activeOption ? 'text-white' : 'text-gray-400'
-                  }`}
-              >
-                {item.label}
-              </a>
-              {index == activeOption && (
-                <div className="h-[2px] w-full bg-purple-400"></div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
-
+      <LibraryNav/>
       {/*MARK: history  
       */}
       <div className='w-full h-fit mt-10'>

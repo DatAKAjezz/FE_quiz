@@ -70,7 +70,7 @@ const Header = () => {
 
   return (
     <>
-      <div className='flex items-center justify-between absolute top-0 z-20 bg-gray-800 w-full py-3 px-5'>
+      <div className=' shadow-lg flex items-center justify-between absolute top-0 z-20 bg-slate-900 w-full py-3 px-5'>
         <HiMenu
           className="text-4xl cursor-pointer text-white "
           onClick={() => setIsOpened(prev => !prev)}
@@ -142,7 +142,7 @@ const Header = () => {
       <div className="relative h-screen box-border">
         <div
           className='font-bold pt-16 absolute text-base flex flex-col justify-between 
-                h-full bg-gray-800 text-white overflow-hidden p-4 transition-all duration-150 ease-in'
+                h-full bg-slate-900  text-white overflow-hidden p-4 transition-all duration-150 ease-in'
           style={{ width: isOpened ? '17vw' : '5vw' }}
         >
           <div className="mt-4">

@@ -7,6 +7,9 @@ import { Dashboard } from "../pages/Dashboard";
 import PrivateRoute from "../pages/PrivateRoute";
 import { Signup } from "../pages/Authentication/Signup";
 import { Library } from "../pages/Library/Library";
+import { Folders } from "../pages/Library/Folders";
+import { Classes } from "../pages/Library/Classes";
+import { Solutions } from "../pages/Library/Solutions";
 
 const LayoutWithHeader = () => {
   return (
@@ -27,7 +30,27 @@ const routes = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       { path: '/dashboard', element: <PrivateRoute children={<Dashboard />} /> },
-      { path: '/library', element: <PrivateRoute children={<Library />} /> }
+      { path: '/library', element: <PrivateRoute children={<Library />} /> },
+      {
+        path: 'library/sets',
+        element: <Library />,
+        errorElement: <Error />
+      },
+      {
+        path: 'library/folders',
+        element: <Folders />,
+        errorElement: <Error />
+      },
+      {
+        path: 'library/classes',
+        element: <Classes />,
+        errorElement: <Error />
+      },
+      {
+        path: 'library/solutions',
+        element: <Solutions />,
+        errorElement: <Error />
+      }
     ]
   },
   {
@@ -40,6 +63,7 @@ const routes = createBrowserRouter([
     element: <Signup />,
     errorElement: <Error />
   },
+
 ]);
 
 

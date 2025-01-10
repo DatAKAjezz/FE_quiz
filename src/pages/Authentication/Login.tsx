@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { HiMiniXMark } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom'
