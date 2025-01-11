@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchUserContributions, fetchUserData } from '../services/API';
+import { fetchChangeUserIntroduction, fetchUserContributions, fetchUserData } from '../services/API';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
-import { LuMapPin } from 'react-icons/lu';
+import { LuMapPin, LuPenLine } from 'react-icons/lu';
 import { MdOutlineEmail } from 'react-icons/md';
 import { IoShareSocialOutline } from 'react-icons/io5';
 
@@ -12,15 +12,17 @@ export const Dashboard = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState<any>();
     const [contributions, setContributions] = useState<any[]>([]);
+    const [adjustMode, setAdjustMode] = useState<boolean>(false);
+    const refInputIntro = useRef<HTMLTextAreaElement>(null);
+    const [introMessage, setIntroMessage] = useState<string>('');
 
-    useEffect(() => {
+    const fetchUser = () => {
         const token = localStorage.getItem('token');
         if (!token) {
             alert('Bạn cần đăng nhập để truy cập DASHBOARD!');
             navigate('/login');
             return;
         }
-
         fetchUserData(token)
             .then(response => {
                 if (response.data.success) {
@@ -36,6 +38,10 @@ export const Dashboard = () => {
                 localStorage.removeItem('token');
                 navigate('/login');
             });
+    }
+
+    useEffect(() => {
+        fetchUser();
     }, [navigate]);
 
     useEffect(() => {
@@ -59,9 +65,43 @@ export const Dashboard = () => {
         }
     }, [contributions]);
 
+    useEffect(() => {
+        const handleClickOutSide = (event: any) => {
+            event.preventDefault();
+            if (event.target === refInputIntro.current) {
+                return;
+            }
+            setAdjustMode(false);
+        }
+        window.addEventListener('mousedown', handleClickOutSide);
+
+        return () => {
+            window.removeEventListener('mousedown', handleClickOutSide);
+        }
+
+    }, [])
+    const handleInputIntroductionChange = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+
+
+            const x = await fetchChangeUserIntroduction(user.user_id, introMessage);
+            try {
+                if (x.success) {
+                    console.log('User info updated successfully.');
+                    fetchUser();
+                } else {
+                    console.log('User info update failed.');
+                }
+            } catch (error) {
+                console.log('Error: ', error);
+            }
+        }
+    }
+
+
     return (
         <div className='w-full h-full rounded-sm bg-slate-800 pt-16'>
-
             {
                 user &&
                 <div className='w-11/12 mx-auto flex flex-wrap shadow-xl bg-slate-700 rounded-md py-5'
@@ -100,14 +140,37 @@ export const Dashboard = () => {
                         </div>
                     </div>
 
+                    {/*MARK: right
+  */}
                     <div className='w-9/12 pr-10'>
-                        <div className='px-3 pt-5 w-full min-h-40 mx-auto border-gray-500 border-[1px] rounded-md'>
+                        <div className='relative px-3 pt-5 w-full min-h-40 mx-auto border-gray-500 border-[1px] rounded-md'>
                             <div className='w-fit'>
                                 <p className='font-bold'>&nbsp;Introduction&nbsp;</p>
                                 <div className='h-[4px] rounded-md w- bg-purple-400'></div>
                             </div>
                             <br />
-                            <p className='text-sm px-2'>{user.readme}</p>
+
+                            {
+                                adjustMode ?
+                                    <textarea
+                                        ref={refInputIntro}
+                                        autoFocus
+                                        className='border-white w-full shadow-md'
+                                        style={{ backgroundColor: 'rgb(38, 48, 77)' }}
+                                        value={introMessage}
+                                        onChange={(event) => { setIntroMessage(event.target.value); console.log('Intro: ', introMessage) }}
+                                        onKeyDown={(event) => handleInputIntroductionChange(event)}
+                                    />
+
+                                    :
+                                    <p className='text-sm px-2'>{user.readme}</p>
+
+                            }
+                            
+                            <LuPenLine className='absolute top-5 right-5 cursor-pointer hover:text-purple-400 
+                                                  transition-all duration-200 ease-in-out text-xl'
+                                onClick={() => { setAdjustMode(prev => !prev); }}
+                            />
 
                         </div>
 

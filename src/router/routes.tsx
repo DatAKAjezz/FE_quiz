@@ -10,6 +10,7 @@ import { Library } from "../pages/Library/Library";
 import { Folders } from "../pages/Library/Folders";
 import { Classes } from "../pages/Library/Classes";
 import { Solutions } from "../pages/Library/Solutions";
+import { FlashCard } from "../pages/QF/FlashCard";
 
 const LayoutWithHeader = () => {
   return (
@@ -50,6 +51,11 @@ const routes = createBrowserRouter([
         path: 'library/solutions',
         element: <Solutions />,
         errorElement: <Error />
+      },
+      {
+        path: '/category/:flashId',
+        element: <FlashCard/>,
+        errorElement: <Error/>
       }
     ]
   },

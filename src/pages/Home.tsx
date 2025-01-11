@@ -1,24 +1,16 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 export const Home = () => {
  
   const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user') || '')
-
-  useEffect(() => {console.log(user)}, [user])
+  const user1 = JSON.parse(localStorage.getItem('user') ?? '')
+  const user = user1[0];
 
   return (
     <div>
-      {token ? 
-      <>
-        This is {user.username} Home
-      </> 
-
-        : 
-
-      <>
-        This is Home
-      </>}
+      {
+        token ? <>This is {user.username} home</> : <>hello</>
+      }
     </div>
   )
 }
