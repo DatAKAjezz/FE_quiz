@@ -22,16 +22,14 @@ export const Dashboard = () => {
             alert('Bạn cần đăng nhập để truy cập DASHBOARD!');
             navigate('/login');
             return;
-        }
+        }   
         fetchUserData(token)
             .then(response => {
                 if (response.data.success) {
                     localStorage.setItem('user', JSON.stringify(response.data.data));
                     setUser(response.data.data[0])
                     console.log("Đăng nhập thành công\nUser Data:", response.data.data[0]);
-                } else {
-                    throw new Error(response.data.message);
-                }
+                } 
             })
             .catch((error) => {
                 alert('Có lỗi xảy ra: ' + error.message);
@@ -132,6 +130,7 @@ export const Dashboard = () => {
                                         display: 'inline-block'
                                     }}
                                         href={user.social_link}
+                                        target='_blank'
                                     >
                                         {user.social_link}dsadsd
                                     </a>

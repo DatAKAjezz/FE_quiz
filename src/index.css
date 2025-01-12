@@ -37,5 +37,37 @@ body{
     background-color: rgb(29, 28, 49);
 }
 
+.flipped{
+  transform: rotateX(180deg);
+}
 
+.flipped2{
+  transform: rotateX(180deg);
+}
+
+.drop-in-right{
+  animation: dropInRight 0.3s ease-in;
+}
+
+.drop-in-left{
+  animation: dropInLeft 0.3s ease-in;
+}
+
+@keyframes dropInRight{
+  0%{
+    transform: translateX(150px) rotateY(60deg);
+  }
+  100%{
+    transform: translateX(0px) rotateY(0deg);
+  }
+}
+
+@keyframes dropInLeft {
+  0% {
+    transform: translateX(-150px) rotateY(-60deg);
+  }
+  100% {
+    transform: translateX(0px) rotateY(0deg);
+  }
+}
 

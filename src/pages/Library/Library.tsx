@@ -50,7 +50,8 @@ export const Library = () => {
               <ul className='w-full flex justify-evenly mt-8 cursor-pointer'>
                 {
                   history.map((item, index) => (
-                    <li key={index} className=' hover:-translate-x-1 hover:-translate-y-1 w-1/4 px-2 rounded-md hover:shadow-lx
+                    <li key={index} onClick={() => {navigate(`/flashsets/${item.id}/1`)}} 
+                        className=' hover:-translate-x-1 hover:-translate-y-1 w-1/4 px-2 rounded-md hover:shadow-lx
                                                bg-slate-700 min-h-48 transition-all duration-150 ease-in-out 
                                                active:translate-x-0 active:translate-y-0 relative' >
                       <p className='font-bold pt-3 pl-4'>{item.title}</p>

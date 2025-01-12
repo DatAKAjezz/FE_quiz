@@ -88,3 +88,25 @@ export const fetchChangeUserIntroduction = async (userId: string, message: strin
     }
 }
 
+export const fetchAllQuestions = async (setId: string): Promise<any> =>{
+    try{
+        const response = await axioss.get(`/api/getall/${setId}`,{
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        })
+        if (response.data.success){
+            console.log(response);
+            return {success: true, data: response.data.data}
+        }
+        else{
+            console.log('Error: ', response.data.message);
+            return {success: false};
+        }
+    }
+    catch (error){
+        console.log('Error fetching all question of sets id: ' + setId + ' ' + error);
+        throw error;
+    }
+}
+

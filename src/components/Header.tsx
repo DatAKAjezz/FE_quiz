@@ -28,7 +28,7 @@ const Header = () => {
 
   const menuItems = [
     { icon: <RiHome9Line className="text-2xl icon" />, label: 'Trang chủ', path: '/' },
-    { icon: <FaRegFolderOpen className="icon text-2xl " />, label: 'Thư viện', path: '/library' },
+    { icon: <FaRegFolderOpen className="icon text-2xl " />, label: 'Thư viện', path: '/library/sets' },
     { icon: <RiFilePaperLine className="icon text-2xl " />, label: 'Thẻ ghi nhớ' },
     { icon: <TbCategory className="icon text-2xl " />, label: 'Lời giải chuyên gia' },
     { icon: <GoReport className="icon text-2xl " />, label: 'Báo cáo' },

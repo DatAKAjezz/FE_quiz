@@ -51,11 +51,6 @@ const routes = createBrowserRouter([
         path: 'library/solutions',
         element: <Solutions />,
         errorElement: <Error />
-      },
-      {
-        path: '/category/:flashId',
-        element: <FlashCard/>,
-        errorElement: <Error/>
       }
     ]
   },
@@ -69,6 +64,11 @@ const routes = createBrowserRouter([
     element: <Signup />,
     errorElement: <Error />
   },
+  {
+    path: '/flashsets/:flashId/:type',
+    element: <FlashCard />,
+    errorElement: <Error />
+  }
 
 ]);
 
