@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { HiMiniXMark } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom'
+import { NotificationHehe } from '../../components/Notification';
 
 export const Login = () => {
 
@@ -12,17 +13,21 @@ export const Login = () => {
     })
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [renderNotif, setRenderNotif] = useState<number>(0);
 
     const navigate = useNavigate();
-
+    
+    const [notif, setNotif] = useState<{message: string , success: boolean}>({message: '', success: false});
     // dat 1
     
     const handleChange = (e: { target: { name: any; value: any; }; }) => {
         const { name, value } = e.target;
         setFormData({...formData, [name]: value})
+        console.log(formData);
     }
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        setRenderNotif(prev => prev + 1);
         e.preventDefault();
         try{
             const response = await axios.post('http://localhost:3001/login',formData,
@@ -33,12 +38,14 @@ export const Login = () => {
             const result = response.data;
 
             if (result.success){
-                alert('Dang nhap thanh cong!')
+                setNotif({message: 'Dang nhap thanh cong', success: true})
                 localStorage.setItem('token', result.token);
-                navigate('/dashboard')
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 1000); 
             }
             else{
-                alert(result.message || 'Dang nhap that bai!')
+                setNotif({message: 'Invalid credentials', success: false})
             }
         }
         catch (err){
@@ -95,7 +102,7 @@ export const Login = () => {
                 </div>
                 <button className='hover:bg-slate-800 w-1/4 bg-slate-600 text-white px-1 py-2 rounded-md' type='submit'>Đăng nhập</button>
             </form>
-
+            {notif.message.length > 0 && <NotificationHehe key={renderNotif} message={notif.message} success = {notif.success}/>}
         </div>
     </div>
   )

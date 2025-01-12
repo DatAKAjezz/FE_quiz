@@ -9,12 +9,18 @@ import { TbBrandCodepen } from 'react-icons/tb';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { fetchAllQuestions } from '../../services/API';
 import '../../index.css'
+import { FaHeart } from 'react-icons/fa';
+import { ImWondering2 } from 'react-icons/im';
+import { GrFormClose } from 'react-icons/gr';
+import { Switch } from '@mui/material';
+import { NotificationHehe } from '../../components/Notification';
 
 export const FlashCard = () => {
 
     let location = useLocation();
     const segments = location.pathname.split('/');
     const type = segments[segments.length - 1];
+    const setId = segments[segments.length - 2];
 
     const params = useParams();
     const navigate = useNavigate();
@@ -22,6 +28,12 @@ export const FlashCard = () => {
     const [isDropped, setIsDropped] = useState<boolean>(false);
     const [questions, setQuestions] = useState<any>([]);
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
+
+    const [learned, setLearned] = useState<number>(0);
+    const [unlearned, setUnlearned] = useState<number>(0);
+
+    const [progressMode, setProgressMode] = useState<boolean>(false);
+
 
     const refCard: any = useRef();
 
@@ -37,8 +49,8 @@ export const FlashCard = () => {
     }, [currentQuestion])
 
     useEffect(() => {
-        if (type) {
-            fetchAllQuestions(type)
+        if (setId) {
+            fetchAllQuestions(setId)
                 .then((response) => {
                     if (response.success) {
                         setQuestions(response.data);
@@ -74,7 +86,17 @@ export const FlashCard = () => {
     ];
 
     return (
-        <div className='w-screen h-screen pt-10'>
+        <div className='relative w-screen h-screen pt-10'>
+            <div className='absolute w-fit right-10 text-white flex gap-5'>
+                <div className='text-4xl text-green-600 text-center'>
+                    <FaHeart />
+                    <p className='text-3xl'>{learned}</p>
+                </div>
+                <div className='text-4xl text-center text-orange-600'>
+                    <ImWondering2 />
+                    <p className='text-3xl'>{unlearned}</p>
+                </div>
+            </div>
             <div className='text-white'>
                 <div className='select-none justify-evenly min-w-56 flex items-center gap-3 w-fit bg-purple-800 rounded-md cursor-pointer
                                 relative px-5 py-5 ml-16'
@@ -119,26 +141,48 @@ export const FlashCard = () => {
             {/*MARK: card
  */}
 
-            <div
-                ref={refCard}
-                onClick={() => { setIsFlipped(prev => !prev) }}
-                className={`text-3xl select-none rounded-md flex items-center mt-10 w-2/3 h-2/3
+            <div className='h-full'>
+                <div
+                    id='card'
+                    ref={refCard}
+                    onClick={() => { setIsFlipped(prev => !prev) }}
+                    className={`text-3xl select-none rounded-md flex items-center mt-10 w-2/3 h-2/3
                              bg-slate-700 mx-auto cursor-pointer shadow-md shadow-slate-700
                             my-auto text-white ${isFlipped ? 'flipped' : ''} transition-all duration-500 ease-in-out`}>
 
-                {questions.length > 0 &&
-                    <p className={`mx-auto transition-all duration-500 ease-in-out ${isFlipped ? 'flipped2' : ''}`}>
-                        {isFlipped ? questions[currentQuestion].answer : questions[currentQuestion].question}
-                    </p>}
+                    {questions.length > 0 &&
+                        <p className={`mx-auto transition-all duration-500 ease-in-out ${isFlipped ? 'flipped2' : ''}`}>
+                            {isFlipped ? questions[currentQuestion].answer : questions[currentQuestion].question}
+                        </p>}
+                </div>
             </div>
 
             <div className='text-white flex min-w-[100px] left-1/2 ml-[-50px] items-center text-5xl absolute gap-5 bottom-16'>
-                <MdNavigateBefore onClick={(e) => {
-                    e.stopPropagation();
-                    if (currentQuestion > 0) setCurrentQuestion(prev => prev - 1);
-                    handleDroppingIn('drop-in-left')
-                }}
-                    className='hover:bg-slate-500 rounded-md bg-slate-700 cursor-pointer' />
+                <div className='absolute text-sm whitespace-nowrap w-fit right-96 cursor-pointer'>
+                    Theo dõi tiến độ
+                    <Switch onClick={() => setProgressMode(prev => !prev)}/>
+                </div>
+
+
+                {
+                    progressMode ? <GrFormClose
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (currentQuestion > 0) setCurrentQuestion(prev => prev - 1);
+                            handleDroppingIn('drop-in-left')
+                        }}
+                        className='bg-red-500 hover:bg-red-600 rounded-md cursor-pointer'
+                    />
+                        :
+                        <MdNavigateBefore onClick={(e: any) => {
+                            e.stopPropagation();
+                            if (currentQuestion > 0) setCurrentQuestion(prev => prev - 1);
+                            handleDroppingIn('drop-in-left')
+                        }}
+                            className='hover:bg-slate-500 rounded-md bg-slate-700 cursor-pointer'
+                        />
+                }
+
                 <MdNavigateNext
                     onClick={(e) => {
                         e.stopPropagation();
@@ -147,7 +191,6 @@ export const FlashCard = () => {
                     }}
                     className='hover:bg-slate-500 rounded-md bg-slate-700 cursor-pointer' />
             </div>
-
         </div>
     );
 };
