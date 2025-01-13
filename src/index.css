@@ -55,7 +55,7 @@ body{
 
 @keyframes dropInRight{
   0%{
-    transform: translateX(150px) rotateY(60deg);
+    transform: translateX(200px) scale(1.1) rotateY(-45deg);
   }
   100%{
     transform: translateX(0px) rotateY(0deg);
@@ -64,10 +64,18 @@ body{
 
 @keyframes dropInLeft {
   0% {
-    transform: translateX(-150px) rotateY(-60deg);
+    transform: translateX(-200px) scale(1.1) rotateY(-45deg);
   }
   100% {
     transform: translateX(0px) rotateY(0deg);
   }
+}
+
+.fade-left{
+
+}
+
+.fade-right{
+
 }
 

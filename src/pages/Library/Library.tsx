@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchLibraryData } from '../../services/API.ts'
 import { LibraryNav } from '../../components/LibraryNav.tsx';
+import { ThumbSet } from '../../components/ThumbSet.tsx';
 
 export const Library = () => {
 
@@ -46,19 +47,13 @@ export const Library = () => {
         <div>
           {
             history.length > 0 ?
-              <ul className='w-full flex justify-evenly mt-8 cursor-pointer'>
+              <div className='w-full flex justify-evenly mt-8 cursor-pointer'>
                 {
                   history.map((item, index) => (
-                    <li key={index} onClick={() => {navigate(`/flashsets/${item.id}/1`)}} 
-                        className='hover:-translate-x-1 hover:-translate-y-1 w-1/4 px-2 rounded-md hover:shadow-lx
-                                               bg-slate-700 min-h-48 transition-all duration-150 ease-in-out 
-                                               active:translate-x-0 active:translate-y-0' >
-                      <p className='font-bold pt-3 pl-4'>{item.title}</p>
-                      {/* <CiIndent className='absolute translate-x-36 translate-y-12 text-2xl' /> */}
-                    </li>
+                    <ThumbSet data = {item} class = 'bg-slate-600 rounded-md w-1/4 min-h-48'/>
                   ))
                 }
-              </ul>
+              </div>
               :
               <p className='px-5 pt-10'>Học gì đó đê. Quá là trống vắng... </p>
           }

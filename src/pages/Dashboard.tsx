@@ -22,14 +22,14 @@ export const Dashboard = () => {
             alert('Bạn cần đăng nhập để truy cập DASHBOARD!');
             navigate('/login');
             return;
-        }   
+        }
         fetchUserData(token)
             .then(response => {
                 if (response.data.success) {
                     localStorage.setItem('user', JSON.stringify(response.data.data));
                     setUser(response.data.data[0])
                     console.log("Đăng nhập thành công\nUser Data:", response.data.data[0]);
-                } 
+                }
             })
             .catch((error) => {
                 alert('Có lỗi xảy ra: ' + error.message);
@@ -97,6 +97,13 @@ export const Dashboard = () => {
         }
     }
 
+    const handleAutoResize = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const textarea = event.target;
+        textarea.style.height = 'auto'; // Reset chiều cao về auto để đo chiều cao chính xác
+        textarea.style.height = `${textarea.scrollHeight}px`; // Đặt chiều cao theo nội dung
+    };
+
+
 
     return (
         <div className='w-full h-full rounded-sm bg-slate-800 pt-16'>
@@ -152,20 +159,24 @@ export const Dashboard = () => {
                             {
                                 adjustMode ?
                                     <textarea
+
                                         ref={refInputIntro}
                                         autoFocus
                                         className='border-white w-full shadow-md'
                                         style={{ backgroundColor: 'rgb(38, 48, 77)' }}
                                         value={introMessage}
-                                        onChange={(event) => { setIntroMessage(event.target.value); console.log('Intro: ', introMessage) }}
+                                        onChange={(event) => { 
+                                                setIntroMessage(event.target.value); 
+                                                handleAutoResize(event) 
+                                        }}
                                         onKeyDown={(event) => handleInputIntroductionChange(event)}
                                     />
 
                                     :
-                                    <p className='text-sm px-2'>{user.readme}</p>
+                                    <p className='text-sm px-2 whitespace-normal'>{user.readme}</p>
 
                             }
-                            
+
                             <LuPenLine className='absolute top-5 right-5 cursor-pointer hover:text-purple-400 
                                                   transition-all duration-200 ease-in-out text-xl'
                                 onClick={() => { setAdjustMode(prev => !prev); }}

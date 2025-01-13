@@ -38,7 +38,7 @@ export const Login = () => {
             const result = response.data;
 
             if (result.success){
-                setNotif({message: 'Dang nhap thanh cong', success: true})
+                setNotif({message: 'Dang nhap thanh cong...', success: true})
                 localStorage.setItem('token', result.token);
                 setTimeout(() => {
                     navigate('/dashboard');
@@ -60,13 +60,15 @@ export const Login = () => {
         </div>
 
         <div className='w-1/2 relative'>
-            <HiMiniXMark className='absolute right-3 top-3 hover:bg-zinc-200 cursor-pointer rounded-md text-3xl' />
+            <HiMiniXMark 
+                onClick={() => {navigate('/')}}
+            className='absolute right-3 top-3 hover:bg-zinc-200 cursor-pointer rounded-md text-3xl' />
             <div className='w-fit flex pl-24 pt-20 pb-16 text-3xl font-bold'>
                 <p className = 'w-fit bg-sky-700 rounded-md px-5 py-3 text-white cursor-pointer' onClick = {() => {navigate('/login')}}>Log in</p>
                 <p className = 'w-fit ml-5  px-5 py-3 cursor-pointer' onClick={() => {navigate('/signup')}}>Sign up</p>
             </div>
             <form onSubmit={handleSubmit} className='submit-container mx-auto w-9/12 rounded-md flex flex-col h-fit'>
-                <div>
+                <div>   
                     <div className='flex flex-wrap'>
                         <label htmlFor='username' className = 'w-full'>Username </label>
                         <input
@@ -102,7 +104,8 @@ export const Login = () => {
                 </div>
                 <button className='hover:bg-slate-800 w-1/4 bg-slate-600 text-white px-1 py-2 rounded-md' type='submit'>Đăng nhập</button>
             </form>
-            {notif.message.length > 0 && <NotificationHehe key={renderNotif} message={notif.message} success = {notif.success}/>}
+            {notif.message.length > 0 && <NotificationHehe key={renderNotif} 
+                                            message={notif.message} success = {notif.success ? 'success' : 'error'}/>}
         </div>
     </div>
   )

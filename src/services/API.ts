@@ -88,6 +88,29 @@ export const fetchChangeUserIntroduction = async (userId: string, message: strin
     }
 }
 
+export const updateLearnedCard = async (cardId: string): Promise<any> => {
+    try{
+        const response = await axioss.put(`/api/save/card`,{
+            cardId: cardId
+        }, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (response.data.success){
+            return {success: true}
+        }
+        else{
+            return {success: false}
+        }
+
+    }
+    catch (error){
+        console.log('Error at updating card: ', error);
+    }
+}
+
 export const fetchAllQuestions = async (setId: string): Promise<any> =>{
     try{
         const response = await axioss.get(`/api/getall/${setId}`,{
@@ -96,7 +119,7 @@ export const fetchAllQuestions = async (setId: string): Promise<any> =>{
             }
         })
         if (response.data.success){
-            console.log(response);
+            // console.log(response);
             return {success: true, data: response.data.data}
         }
         else{
@@ -109,4 +132,5 @@ export const fetchAllQuestions = async (setId: string): Promise<any> =>{
         throw error;
     }
 }
+
 

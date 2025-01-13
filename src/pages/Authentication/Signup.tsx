@@ -58,7 +58,9 @@ export const Signup = () => {
                 style={{ backgroundImage: `URL('/loginbg.jpg')` }}
             ></div>
             <div className="w-1/2 relative">
-                <HiMiniXMark className='absolute right-3 top-3 hover:bg-zinc-200 cursor-pointer rounded-md text-3xl' />
+                <HiMiniXMark
+                    onClick={() => { navigate('/') }}
+                    className='absolute right-3 top-3 hover:bg-zinc-200 cursor-pointer rounded-md text-3xl' />
                 <div className="w-fit flex pl-24 pt-20 pb-16 text-3xl font-bold">
                     <p
                         className="w-fit rounded-md px-5 py-3 cursor-pointer"
@@ -98,7 +100,7 @@ export const Signup = () => {
                                 Password
                             </label>
                             <input
-                                type={showPassword ? 'text' :  "password"}
+                                type={showPassword ? 'text' : "password"}
                                 id="password"
                                 name="password"
                                 value={formData.password}
@@ -108,10 +110,10 @@ export const Signup = () => {
                                 placeholder="Enter your password"
                             />
                             {
-                                showPassword ?      <FaRegEye className='absolute bottom-8 right-7 cursor-pointer'
-                                                        onClick={() => {setShowPassword(prev => !prev)}}/> 
-                                                :   <FaRegEyeSlash className='absolute bottom-8 right-7 cursor-pointer'
-                                                            onClick={() => {setShowPassword(prev => !prev)}}/>
+                                showPassword ? <FaRegEye className='absolute bottom-8 right-7 cursor-pointer'
+                                    onClick={() => { setShowPassword(prev => !prev) }} />
+                                    : <FaRegEyeSlash className='absolute bottom-8 right-7 cursor-pointer'
+                                        onClick={() => { setShowPassword(prev => !prev) }} />
                             }
                         </div>
                         <div className="flex flex-wrap relative">
@@ -119,7 +121,7 @@ export const Signup = () => {
                                 Confirm Password
                             </label>
                             <input
-                                type={showPassword2  ? 'text' :  "password"}
+                                type={showPassword2 ? 'text' : "password"}
                                 id="confirmPassword"
                                 name="confirmPassword"
                                 value={pass2}
@@ -129,11 +131,11 @@ export const Signup = () => {
                                 placeholder="Confirm your password"
                             />
                             {
-                                showPassword2 ?      <FaRegEye className='absolute bottom-8 right-7 cursor-pointer'
-                                                    onClick={() => {setShowPassword2(prev => !prev)}}/> 
-                                                :   <FaRegEyeSlash className='absolute bottom-8 right-7 cursor-pointer'
-                                                        onClick={() => {setShowPassword2(prev => !prev)}}/>
-                            }                           
+                                showPassword2 ? <FaRegEye className='absolute bottom-8 right-7 cursor-pointer'
+                                    onClick={() => { setShowPassword2(prev => !prev) }} />
+                                    : <FaRegEyeSlash className='absolute bottom-8 right-7 cursor-pointer'
+                                        onClick={() => { setShowPassword2(prev => !prev) }} />
+                            }
                         </div>
                     </div>
                     <button
