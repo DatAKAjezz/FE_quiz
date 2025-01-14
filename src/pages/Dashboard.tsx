@@ -6,6 +6,8 @@ import 'react-calendar-heatmap/dist/styles.css';
 import { LuMapPin, LuPenLine } from 'react-icons/lu';
 import { MdOutlineEmail } from 'react-icons/md';
 import { IoShareSocialOutline } from 'react-icons/io5';
+import { RiImageAddLine } from 'react-icons/ri';
+import axios from 'axios';
 
 export const Dashboard = () => {
 
@@ -81,8 +83,6 @@ export const Dashboard = () => {
     const handleInputIntroductionChange = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-
-
             const x = await fetchChangeUserIntroduction(user.user_id, introMessage);
             try {
                 if (x.success) {
@@ -99,10 +99,52 @@ export const Dashboard = () => {
 
     const handleAutoResize = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const textarea = event.target;
-        textarea.style.height = 'auto'; // Reset chiều cao về auto để đo chiều cao chính xác
-        textarea.style.height = `${textarea.scrollHeight}px`; // Đặt chiều cao theo nội dung
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
     };
 
+    // MARK: image
+    const [image, setImage] = useState<any>(null);
+    const [images, setImages] = useState<any>([]);
+
+    const handleImageChange = (e: any) => {
+        setImage(e.target.files[0]);
+    }
+
+    const fetchImage = async () => {
+        if (!user) return;
+        try {
+            const res = await axios.get(`http://localhost:3001/images/${user.id}`);
+            setImages(res.data.data);
+        } catch (err) {
+            console.error(err); 
+        }
+    };
+
+    const handleUpload = async () => {
+        if (!image || !user) return alert('No image provided');
+
+        const formData = new FormData();
+        formData.append('image', image);
+        formData.append('userId', user.id);
+
+        try {
+            const response = await axios.post('http://localhost:3001/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+
+            alert(response.data.message);
+            fetchImage();
+
+        }
+        catch (err) { console.log('Error at uploading image: ', err) };
+
+    }
+
+    useEffect(() => {
+        fetchImage();
+        
+    }, [user]);
 
 
     return (
@@ -113,10 +155,32 @@ export const Dashboard = () => {
                     style={{ backgroundColor: 'rgb(38, 48, 77)' }}
                 >
                     <div className='w-3/12'>
+
                         <div className='w-9/12 px-5 py-3 rounded-md mx-auto' style={{ backgroundColor: 'rgb(38, 48, 77)' }}>
-                            <img src={user.avatar_url} className='aspect-square rounded-full w-full mx-auto'></img>
+
+                            <div className='relative w-full mx-auto rounded-full group'>
+
+                                <img             
+                                    src={`http://localhost:3001${images[0]?.image_path}`}
+                                    className="rounded-full aspect-square w-full mx-auto transition-opacity duration-300 group-hover:opacity-50" />
+                                <RiImageAddLine
+                                    className="absolute text-white text-3xl opacity-0 transition-opacity duration-300 
+                                               group-hover:opacity-100 group-hover:scale-110"
+                                    style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
+                                    title="upload image"
+                                />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="absolute opacity-0 w-full h-full top-0 left-0 cursor-pointer"
+                                />
+                            </div>
+                            <button onClick={handleUpload}>Upload</button>
+
                             <p className='font-bold text-center mt-3' style={{ fontSize: '20px' }}>{user.firstname} {user.lastname}</p>
                         </div>
+
                         <div className='ml-10 m-6 text-sm'>
                             <div className='flex items-center w-fit gap-3'>
                                 <LuMapPin id='address' /><label htmlFor='address' className=''>{user.address}</label>
@@ -165,9 +229,9 @@ export const Dashboard = () => {
                                         className='border-white w-full shadow-md'
                                         style={{ backgroundColor: 'rgb(38, 48, 77)' }}
                                         value={introMessage}
-                                        onChange={(event) => { 
-                                                setIntroMessage(event.target.value); 
-                                                handleAutoResize(event) 
+                                        onChange={(event) => {
+                                            setIntroMessage(event.target.value);
+                                            handleAutoResize(event)
                                         }}
                                         onKeyDown={(event) => handleInputIntroductionChange(event)}
                                     />
@@ -201,11 +265,8 @@ export const Dashboard = () => {
                                     <p>Đang tải dữ liệu đóng góp...</p>
                                 )
                             }
-
                         </div>
-
                     </div>
-
                 </div>
             }
 
