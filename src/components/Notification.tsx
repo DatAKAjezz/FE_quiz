@@ -16,7 +16,7 @@ export const NotificationHehe = ({ message, success }: { message: string, succes
         setIsOpened(false);
     };
 
-    let severity: 'success' | 'error' | 'warning' | 'info' = 'info'; // Giá trị mặc định
+    let severity: 'success' | 'error' | 'warning' | 'info' = 'info'; 
 
     switch (success) {
       case 'success':

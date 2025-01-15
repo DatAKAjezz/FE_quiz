@@ -107,7 +107,7 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
       >
         <img
           className="w-10 rounded-full h-10 hover:scale-110 transition-all duration-200 ease-in-out"
-          src={user.avatar_url}
+          src={`http://localhost:3001${imagePath}`}
           alt="avatar"
         />
         <p className="pl-4">{user.username}</p>
@@ -123,6 +123,15 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
       ))}
     </ul>
   );
+
+  const [imagePath, setImagePath] = useState<string>('');
+
+  useEffect(() => {
+    setImagePath(localStorage.getItem('image_path') || '')
+    console.log('Image path: ', imagePath);
+  }, [
+    user
+  ])
 
   return (
     <>
@@ -151,7 +160,7 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
               >
                 <img
                   className="hover:scale-110 transition-all duration-200 ease-in-out"
-                  src={user.avatar_url}
+                  src={`http://localhost:3001${imagePath}`}
                   alt="avatar"
                 />
               </div>

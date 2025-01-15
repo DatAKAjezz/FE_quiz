@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchLibraryData } from '../../services/API.ts'
 import { LibraryNav } from '../../components/LibraryNav.tsx';
 import { ThumbSet } from '../../components/ThumbSet.tsx';
+import { NotificationHehe } from '../../components/Notification.tsx';
 
 export const Library = () => {
 
@@ -12,10 +13,13 @@ export const Library = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
+  const [notif, setNotif] = useState<{ message: string, success: string }>({ message: '', success: '' });
+  // const [renderNotif, setRenderNotif] = useState<number>(0);
+
   useEffect(() => {
     if (!token) {
-      alert('Bạn cần đăng nhập để tới thư viện!')
-      navigate('/login');
+      setNotif({ message: 'Bạn cần đăng nhập để tới Library.', success: 'warning' })
+      setTimeout(() => {navigate('/login')}, 1100)
       return;
     }
 
@@ -28,9 +32,9 @@ export const Library = () => {
         }
       })
       .catch(error => {
-        alert('Có lỗi xảy ra: ' + error.message);
+        setNotif({message: error.message, success:'error'})
         localStorage.removeItem('token');
-        navigate('/login');
+        setTimeout(() => {navigate('/login')}, 800)
       })
 
   }, [token])
@@ -49,7 +53,7 @@ export const Library = () => {
             history.length > 0 ?
               <div className='w-full flex justify-evenly mt-8 cursor-pointer'>
                 {
-                  history.map((item, index) => (
+                  history.map((item, _) => (
                     <ThumbSet data = {item} class = 'bg-slate-600 rounded-md w-1/4 min-h-48'/>
                   ))
                 }
@@ -59,6 +63,7 @@ export const Library = () => {
           }
         </div>
       </div>
+            {notif.message.length != 0  && <NotificationHehe message={notif.message} success={notif.success} />}
 
     </div>
   );

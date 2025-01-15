@@ -4,25 +4,35 @@ import { fetchChangeUserIntroduction, fetchUserContributions, fetchUserData } fr
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import { LuMapPin, LuPenLine } from 'react-icons/lu';
-import { MdOutlineEmail } from 'react-icons/md';
+import { MdOutlineCancel, MdOutlineEmail } from 'react-icons/md';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { RiImageAddLine } from 'react-icons/ri';
 import axios from 'axios';
+import { NotificationHehe } from '../components/Notification';
+import { TbPencilMinus } from 'react-icons/tb';
 
 export const Dashboard = () => {
 
     const navigate = useNavigate();
-    const [user, setUser] = useState<any>();
+    const [user, setUser] = useState<any>(null);
     const [contributions, setContributions] = useState<any[]>([]);
     const [adjustMode, setAdjustMode] = useState<boolean>(false);
     const refInputIntro = useRef<HTMLTextAreaElement>(null);
     const [introMessage, setIntroMessage] = useState<string>('');
 
+    const [notif, setNotif] = useState<{ message: string, success: string }>({ message: '', success: '' });
+    const [renderNotif, setRenderNotif] = useState<number>(0);
+    const [adjustProfileMode, setAdjustProfileMode] = useState<boolean>(false);
+
+    useEffect(() => { setRenderNotif(prev => prev + 1) }, [notif])
+
     const fetchUser = () => {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('Bạn cần đăng nhập để truy cập DASHBOARD!');
-            navigate('/login');
+            setNotif({ message: 'Bạn cần đăng nhập để tới Dashboard.', success: 'warning' })
+            setTimeout(() => {
+                navigate('/login');
+            }, 800)
             return;
         }
         fetchUserData(token)
@@ -34,20 +44,22 @@ export const Dashboard = () => {
                 }
             })
             .catch((error) => {
-                alert('Có lỗi xảy ra: ' + error.message);
+                setNotif({ message: error.message, success: 'error' })
                 localStorage.removeItem('token');
-                navigate('/login');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 800)
             });
     }
 
     useEffect(() => {
         fetchUser();
-    }, [navigate]);
+    }, []);
 
     useEffect(() => {
-        if (user) {
-            console.log('User ID: ', user.id);
-            fetchUserContributions(user.id)
+        if (user != null) {
+            console.log('User ID: ', user.user_id);
+            fetchUserContributions(user.user_id)
                 .then(response => {
                     if (response.success) {
                         setContributions(response.data);
@@ -58,12 +70,6 @@ export const Dashboard = () => {
                 })
         }
     }, [user])
-
-    useEffect(() => {
-        if (contributions) {
-            console.log('Contributions: ', contributions);
-        }
-    }, [contributions]);
 
     useEffect(() => {
         const handleClickOutSide = (event: any) => {
@@ -83,7 +89,7 @@ export const Dashboard = () => {
     const handleInputIntroductionChange = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            const x = await fetchChangeUserIntroduction(user.user_id, introMessage);
+            const x = await fetchChangeUserIntroduction(user?.user_id, introMessage);
             try {
                 if (x.success) {
                     console.log('User info updated successfully.');
@@ -111,42 +117,55 @@ export const Dashboard = () => {
         setImage(e.target.files[0]);
     }
 
-    const fetchImage = async () => {
-        if (!user) return;
-        try {
-            const res = await axios.get(`http://localhost:3001/images/${user.id}`);
-            setImages(res.data.data);
-        } catch (err) {
-            console.error(err); 
-        }
-    };
-
     const handleUpload = async () => {
-        if (!image || !user) return alert('No image provided');
-
+        if (!image || !user) {
+            setNotif({ message: 'No image provided', success: 'warning' })
+            return;
+        };
+        console.log(user);
         const formData = new FormData();
         formData.append('image', image);
-        formData.append('userId', user.id);
+        formData.append('userId', user.user_id);
 
         try {
             const response = await axios.post('http://localhost:3001/upload', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
 
-            alert(response.data.message);
+            setNotif({ message: response.data.message, success: 'success' })
             fetchImage();
 
         }
         catch (err) { console.log('Error at uploading image: ', err) };
 
     }
+    const [imagePath, setImagePath] = useState<string>('');
+
+    const fetchImage = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/images/${user?.user_id}`);
+            const fetchedImages = res.data.data;
+            setImages(fetchedImages);
+
+            if (fetchedImages && fetchedImages.length > 0) {
+                localStorage.setItem('image_path', fetchedImages[0].image_path);
+                setImagePath(fetchedImages[0].image_path);
+            }
+            console.log('Image fetched successfully: ', fetchedImages);
+        } catch (err) {
+            console.log('Error fetching images: ', err);
+            setImagePath('./default_avt.jpg');
+        }
+
+    };
 
     useEffect(() => {
-        fetchImage();
-        
+        if (user?.user_id) {
+            fetchImage();
+        }
     }, [user]);
 
-
+    // MARK: return
     return (
         <div className='w-full h-full rounded-sm bg-slate-800 pt-16'>
             {
@@ -156,27 +175,43 @@ export const Dashboard = () => {
                 >
                     <div className='w-3/12'>
 
-                        <div className='w-9/12 px-5 py-3 rounded-md mx-auto' style={{ backgroundColor: 'rgb(38, 48, 77)' }}>
+                        <div className='w-9/12 px-5 py-3 rounded-md mx-auto flex items-center flex-col relative'
+                            style={{ backgroundColor: 'rgb(38, 48, 77)' }}>
+                            {!adjustProfileMode ? <TbPencilMinus className='absolute right-0 text-[20px] cursor-pointer text-gray-300'
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setAdjustProfileMode(prev => !prev)
+                                }} />
+                                : <MdOutlineCancel className='absolute right-0 text-[24px] cursor-pointer text-red-700'
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setAdjustProfileMode(prev => !prev)
+                                    }} />}
+                            <div className='relative rounded-full w-full mx-auto group'>
 
-                            <div className='relative w-full mx-auto rounded-full group'>
-
-                                <img             
-                                    src={`http://localhost:3001${images[0]?.image_path}`}
-                                    className="rounded-full aspect-square w-full mx-auto transition-opacity duration-300 group-hover:opacity-50" />
+                                <img
+                                    src={`http://localhost:3001${imagePath}` || './default_avt.jpg'}
+                                    className="rounded-full bg-center aspect-square w-full mx-auto transition-opacity duration-300 
+                                               group-hover:opacity-50"
+                                />
                                 <RiImageAddLine
-                                    className="absolute text-white text-3xl opacity-0 transition-opacity duration-300 
+                                    className="absolute text-white text-3xl opacity-0 transition-all duration-300 
                                                group-hover:opacity-100 group-hover:scale-110"
-                                    style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
+                                    style={{ top: "80%", left: "50%", transform: "translate(-50%, -50%)" }}
                                     title="upload image"
                                 />
+
                                 <input
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageChange}
-                                    className="absolute opacity-0 w-full h-full top-0 left-0 cursor-pointer"
+                                    className="absolute rounded-full opacity-0 w-full h-1/2 bottom-0 left-0 cursor-pointer"
                                 />
                             </div>
-                            <button onClick={handleUpload}>Upload</button>
+                            {adjustProfileMode && <button className='bg-slate-700 border-black border-2 rounded-md mt-2 px-2'
+                                onClick={handleUpload}>Upload</button>}
 
                             <p className='font-bold text-center mt-3' style={{ fontSize: '20px' }}>{user.firstname} {user.lastname}</p>
                         </div>
@@ -185,7 +220,7 @@ export const Dashboard = () => {
                             <div className='flex items-center w-fit gap-3'>
                                 <LuMapPin id='address' /><label htmlFor='address' className=''>{user.address}</label>
                             </div>
-                            <div className='mt-1 flex items-center w-fit gap-3'>
+                            <div className='mt-[6px] flex items-center w-fit gap-3'>
                                 <MdOutlineEmail id='email' /><label htmlFor='email' className=''>{user.email}</label>
                             </div>
                             <div className='transition-all duration-150 ease-in-out 
@@ -211,7 +246,7 @@ export const Dashboard = () => {
                     </div>
 
                     {/*MARK: right
-  */}
+                    */}
                     <div className='w-9/12 pr-10'>
                         <div className='relative px-3 pt-5 w-full min-h-40 mx-auto border-gray-500 border-[1px] rounded-md'>
                             <div className='w-fit'>
@@ -269,6 +304,8 @@ export const Dashboard = () => {
                     </div>
                 </div>
             }
+
+            {notif.message.length != 0 && renderNotif > 0 && <NotificationHehe key={renderNotif} message={notif.message} success={notif.success} />}
 
         </div>
     )

@@ -71,11 +71,7 @@ body{
   }
 }
 
-.fade-left{
-
-}
-
-.fade-right{
-
+.group:hover{
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 50%, #3c4e5a 50%);
 }
 
