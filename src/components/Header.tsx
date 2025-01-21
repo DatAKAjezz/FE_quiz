@@ -11,6 +11,8 @@ import { LuSunMedium } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import { IoMdNotifications } from 'react-icons/io';
 import { NotificationHehe } from './Notification';
+import { PiCardsBold } from 'react-icons/pi';
+import { MdOutlineQuiz } from 'react-icons/md';
 
 interface MenuItem {
   icon: JSX.Element;
@@ -133,10 +135,24 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
     user
   ])
 
+  const addList = [
+    {
+      element: <PiCardsBold />,
+      title: 'Thẻ ghi nhớ',
+      path: ''
+    }, {
+      element: <MdOutlineQuiz />,
+      title: 'Quizz',
+      path: ''
+    }
+  ]
+
+  const [isAddListOpened, setIsAddListOpened] = useState<boolean>(false);
+
   return (
     <>
 
-      {logOut && <NotificationHehe key = {renderNotif} message='Logging out...' success='info' />}
+      {logOut && <NotificationHehe key={renderNotif} message='Logging out...' success='info' />}
 
       <div className="fixed shadow-lg flex items-center justify-between top-0 z-20 bg-slate-900 w-full py-3 px-5">
         <HiMenu
@@ -148,9 +164,24 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
          */}
         {token && (
           <div className="flex relative flex-row items-center cursor-pointer">
-            <div className='mr-5 bg-blue-600 p-3 rounded-md text-2xl text-white'>
-              <GrAdd />
+            <div className='mr-5 hover:bg-blue-700 relative bg-blue-600 p-3 rounded-md text-2xl text-white'>
+              <GrAdd  onClick={() => {setIsAddListOpened(prev => !prev)}}/>
+              {
+                isAddListOpened && 
+                <ul className='bg-blue-800 border-[1px] rounded-sm absolute top-[110%] right-[80%]'>
+                  {
+                    addList.map((item, index) => (
+                      <li className={`flex w-full px-3 items-center py-1 gap-3 ${index > 0 ? 'border-t-[1px]' : ''}
+                        transition-all duration-100 ease-in
+                      `}>
+                        {item.element}<p className='text-[12px] whitespace-nowrap'>{item.title}</p>
+                      </li>
+                    ))
+                  }
+                </ul>
+              }
             </div>
+
             <div className="flex w-fit items-center bg-slate-600 px-2 py-1 rounded-md">
               <IoMdNotifications className="w-10 h-10 mr-6" />
               <div
@@ -159,7 +190,7 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
                 onClick={() => setIsListOpened(prev => !prev)}
               >
                 <img
-                  className="hover:scale-110 transition-all duration-200 ease-in-out"
+                  className="hover:scale-110 aspect-square w-full transition-all duration-200 ease-in-out"
                   src={`http://localhost:3001${imagePath}`}
                   alt="avatar"
                 />

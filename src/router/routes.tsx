@@ -2,7 +2,7 @@ import { createBrowserRouter, Outlet } from "react-router-dom";
 import { Home } from "../pages/Home";
 import { Error } from "../pages/Error";
 import { Login } from "../pages/Authentication/Login";
-import { Dashboard } from "../pages/Dashboard";
+import { Dashboard } from "../pages/Profiles/Dashboard";
 import PrivateRoute from "../pages/PrivateRoute";
 import { Signup } from "../pages/Authentication/Signup";
 import { Library } from "../pages/Library/Library";
@@ -11,6 +11,7 @@ import { Classes } from "../pages/Library/Classes";
 import { Solutions } from "../pages/Library/Solutions";
 import { FlashCard } from "../pages/QF/FlashCard";
 import { LayoutWithHeader } from "../Layouts/LayoutWithHeader";
+import { FlashMenu } from "../pages/QF/FlashMenu";
 
 
 const routes = createBrowserRouter([
@@ -41,6 +42,11 @@ const routes = createBrowserRouter([
         path: 'library/solutions',
         element: <Solutions />,
         errorElement: <Error />
+      },
+      {
+        path: 'flashsets/:flashId/menu',
+        element: <FlashMenu/>,
+        errorElement: <Error/>
       }
     ]
   },
@@ -54,11 +60,11 @@ const routes = createBrowserRouter([
     element: <Signup />,
     errorElement: <Error />
   },
-  {
-    path: '/flashsets/:flashId/:type',
-    element: <FlashCard />,
-    errorElement: <Error />
-  }
+    {
+      path: '/flashsets/:flashId/:type',
+      element: <FlashCard />,
+      errorElement: <Error />
+    }
 
 ]);
 

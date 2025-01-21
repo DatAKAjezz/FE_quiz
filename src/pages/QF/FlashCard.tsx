@@ -7,7 +7,7 @@ import { PiCardsDuotone } from 'react-icons/pi';
 import { RiArrowDropDownLine, RiHome9Line } from 'react-icons/ri';
 import { TbBrandCodepen } from 'react-icons/tb';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { fetchAllQuestions, updateLearnedCard } from '../../services/API';
+import { fetchAllQuestionsAndAnswers, updateLearnedCard } from '../../services/API';
 import '../../index.css'
 import { FaHeart } from 'react-icons/fa';
 import { ImWondering2 } from 'react-icons/im';
@@ -100,17 +100,18 @@ export const FlashCard = () => {
     }
 
     const goBack = (e: any) => {
-
+        
     }
 
     const [isCardUpdated, setIsCardUpdated] = useState<boolean>(false);
 
     useEffect(() => {
         if (setId) {
-            fetchAllQuestions(setId)
+            fetchAllQuestionsAndAnswers(setId)
                 .then((response) => {
                     if (response.success) {
                         setQuestions(response.data);
+                        console.log(response.data);
                     } else {
                         console.error('Error:', response.message || 'Unknown error');
                     }
@@ -219,7 +220,8 @@ export const FlashCard = () => {
 
                     {questions.length > 0 &&
                         <p className={`mx-auto transition-all duration-500 ease-in-out ${isFlipped ? 'flipped2' : ''}`}>
-                            {isFlipped ? questions[currentQuestion].answer : questions[currentQuestion].question}
+                            {isFlipped ? questions[currentQuestion].answers[questions[currentQuestion].correct_answer].answer
+                                        : questions[currentQuestion].question}
                         </p>}
                 </div>
             </div>

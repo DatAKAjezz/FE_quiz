@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchChangeUserIntroduction, fetchUserContributions, fetchUserData } from '../services/API';
+import { fetchChangeUserIntroduction, fetchUserContributions, fetchUserData } from '../../services/API';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import { LuMapPin, LuPenLine } from 'react-icons/lu';
@@ -8,7 +8,7 @@ import { MdOutlineCancel, MdOutlineEmail } from 'react-icons/md';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { RiImageAddLine } from 'react-icons/ri';
 import axios from 'axios';
-import { NotificationHehe } from '../components/Notification';
+import { NotificationHehe } from '../../components/Notification';
 import { TbPencilMinus } from 'react-icons/tb';
 
 export const Dashboard = () => {
@@ -23,7 +23,7 @@ export const Dashboard = () => {
     const [notif, setNotif] = useState<{ message: string, success: string }>({ message: '', success: '' });
     const [renderNotif, setRenderNotif] = useState<number>(0);
     const [adjustProfileMode, setAdjustProfileMode] = useState<boolean>(false);
-
+    
     useEffect(() => { setRenderNotif(prev => prev + 1) }, [notif])
 
     const fetchUser = () => {
@@ -235,10 +235,10 @@ export const Dashboard = () => {
                                         overflow: 'hidden',
                                         display: 'inline-block'
                                     }}
-                                        href={user.social_link}
+                                        href={`https://${user.social_link}`}
                                         target='_blank'
                                     >
-                                        {user.social_link}dsadsd
+                                        {user.social_link}
                                     </a>
                                 </label>
                             </div>

@@ -52,6 +52,22 @@ export const fetchUserData = async (token: string): Promise<any> => {
     }
 }
 
+export const fetchUserInfo = async (userId: string): Promise<any> => {
+    try{
+        const response = await axioss.get(`/api/user-info/${userId}`, {
+            headers: {
+                "Content-Type": 'application/json'
+            }
+        })
+        console.log('thanh cong: ', response);
+        return response;
+    }
+    catch (err){
+        console.log('Error fetching user infos: ', err);
+        throw err;
+    }
+}
+
 export const fetchUserContributions = async (userId: string): Promise<any> => {
     try {
         const response = await axioss.get(`/api/contributions/${userId}`);
@@ -111,7 +127,7 @@ export const updateLearnedCard = async (cardId: string): Promise<any> => {
     }
 }
 
-export const fetchAllQuestions = async (setId: string): Promise<any> =>{
+export const fetchAllQuestionsAndAnswers = async (setId: string): Promise<any> =>{
     try{
         const response = await axioss.get(`/api/getall/${setId}`,{
             headers:{

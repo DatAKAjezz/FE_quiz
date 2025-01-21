@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import { fetchLibraryData } from '../../services/API.ts'
 import { LibraryNav } from '../../components/LibraryNav.tsx';
 import { ThumbSet } from '../../components/ThumbSet.tsx';
@@ -47,14 +47,15 @@ export const Library = () => {
       {/*MARK: history  
       */}
       <div className='w-full h-fit mt-10'>
-        <h3 className='w-fit ml-12 font-bold px-4' style={{ borderBottom: '3px solid rgb(63, 70, 213)' }}>Lịch sử</h3>
+        <h3 className='w-fit ml-12 font-bold px-4' style={{ borderBottom: '3px solid rgb(63, 70, 213)' }}>Gần đây</h3>
         <div>
           {
             history.length > 0 ?
               <div className='w-full flex justify-evenly mt-8 cursor-pointer'>
                 {
                   history.map((item, _) => (
-                    <ThumbSet data = {item} class = 'bg-slate-600 rounded-md w-1/4 min-h-48'/>
+                    <ThumbSet click={() => {navigate(`/flashsets/${item.id}/menu`,{state: {data: item}} )}} 
+                        data = {item} class = 'bg-slate-600 relative rounded-md w-1/4 min-h-48'/>
                   ))
                 }
               </div>
