@@ -23,14 +23,14 @@ export const fetchAllFlashcardSets = async (): Promise<any> => {
                 'Content-Type': 'application/json'
             }
         })
-        if (response.data.success){
+        if (response.data.success) {
             return response.data;
         }
-        else{
+        else {
             console.log('Failed to fetch all flashcardsets at api!');
         }
     }
-    catch(error){
+    catch (error) {
         console.log('Error fetching all flashcard sets: ', error)
     }
 
@@ -53,7 +53,7 @@ export const fetchUserData = async (token: string): Promise<any> => {
 }
 
 export const fetchUserInfo = async (userId: string): Promise<any> => {
-    try{
+    try {
         const response = await axioss.get(`/api/user-info/${userId}`, {
             headers: {
                 "Content-Type": 'application/json'
@@ -62,7 +62,7 @@ export const fetchUserInfo = async (userId: string): Promise<any> => {
         console.log('thanh cong: ', response);
         return response;
     }
-    catch (err){
+    catch (err) {
         console.log('Error fetching user infos: ', err);
         throw err;
     }
@@ -104,9 +104,30 @@ export const fetchChangeUserIntroduction = async (userId: string, message: strin
     }
 }
 
+export const addLikedSet = async (userId: string, setId: string): Promise<any> => {
+    try {
+        const response = await axioss.put('/api/liked/add', {
+            userId, setId
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (response.data.success) {
+            return ({ success: true })
+        }
+        else return ({ success: false })
+    }
+    catch (error) {
+        console.log("Error at adding set to liked");
+        throw error
+    }
+}
+
 export const updateLearnedCard = async (cardId: string): Promise<any> => {
-    try{
-        const response = await axioss.put(`/api/save/card`,{
+    try {
+        const response = await axioss.put(`/api/save/card`, {
             cardId: cardId
         }, {
             headers: {
@@ -114,36 +135,36 @@ export const updateLearnedCard = async (cardId: string): Promise<any> => {
             }
         })
 
-        if (response.data.success){
-            return {success: true}
+        if (response.data.success) {
+            return { success: true }
         }
-        else{
-            return {success: false}
+        else {
+            return { success: false }
         }
 
     }
-    catch (error){
+    catch (error) {
         console.log('Error at updating card: ', error);
     }
 }
 
-export const fetchAllQuestionsAndAnswers = async (setId: string): Promise<any> =>{
-    try{
-        const response = await axioss.get(`/api/getall/${setId}`,{
-            headers:{
+export const fetchAllQuestionsAndAnswers = async (setId: string): Promise<any> => {
+    try {
+        const response = await axioss.get(`/api/getall/${setId}`, {
+            headers: {
                 'Content-Type': 'application/json'
             }
         })
-        if (response.data.success){
+        if (response.data.success) {
             // console.log(response);
-            return {success: true, data: response.data.data}
+            return { success: true, data: response.data.data }
         }
-        else{
+        else {
             console.log('Error: ', response.data.message);
-            return {success: false};
+            return { success: false };
         }
     }
-    catch (error){
+    catch (error) {
         console.log('Error fetching all question of sets id: ' + setId + ' ' + error);
         throw error;
     }

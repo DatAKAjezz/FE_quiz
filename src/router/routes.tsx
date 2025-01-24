@@ -12,6 +12,7 @@ import { Solutions } from "../pages/Library/Solutions";
 import { FlashCard } from "../pages/QF/FlashCard";
 import { LayoutWithHeader } from "../Layouts/LayoutWithHeader";
 import { FlashMenu } from "../pages/QF/FlashMenu";
+import { Liked } from "../pages/Library/Liked";
 
 
 const routes = createBrowserRouter([
@@ -42,6 +43,11 @@ const routes = createBrowserRouter([
         path: 'library/solutions',
         element: <Solutions />,
         errorElement: <Error />
+      },
+      {
+        path: 'library/liked',
+        element: <Liked/>,
+        errorElement: <Error/>
       },
       {
         path: 'flashsets/:flashId/menu',

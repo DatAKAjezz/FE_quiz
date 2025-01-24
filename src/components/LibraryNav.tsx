@@ -27,6 +27,11 @@ export const LibraryNav = () => {
             id: 'classes',
             label: 'Lớp học',
             path: '/library/classes'
+        },
+        {
+            id: 'liked',
+            label: 'Ưa thích',
+            path: '/library/liked'
         }
     ];
     const navigate = useNavigate();
