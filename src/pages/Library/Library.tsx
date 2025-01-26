@@ -53,7 +53,7 @@ export const Library = () => {
               <div className='w-full flex justify-evenly mt-8 cursor-pointer'>
                 {
                   history.map((item, _) => (
-                    <ThumbSet click={() => {navigate(`/flashsets/${item.id}/menu`,{state: {data: item}} )}} 
+                    <ThumbSet click={() => {navigate(`/flashsets/${item.set_id}/menu`,{state: {data: item}} )}} 
                         data = {item} class = 'bg-slate-600 relative rounded-md w-1/4 min-h-48'/>
                   ))
                 }

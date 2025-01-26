@@ -5,7 +5,8 @@ const axioss = axios.create({
     baseURL: 'http://localhost:3001',
     headers: {
         "Content-Type": 'application/json'
-    }
+    },
+    timeout: 30000,
 })
 
 export const fetchLibraryData = (token: string): Promise<LibraryData> => {
@@ -112,19 +113,18 @@ export const addLikedSet = async (userId: string, setId: string): Promise<any> =
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
+        });
 
-        if (response.data.success) {
-            return ({ success: true })
-        }
-        else return ({ success: false })
+        return {
+            message: response.data.message,
+            isLiked: response.data.isLiked
+        };
     }
     catch (error) {
         console.log("Error at adding set to liked");
-        throw error
+        throw error;
     }
 }
-
 export const updateLearnedCard = async (cardId: string): Promise<any> => {
     try {
         const response = await axioss.put(`/api/save/card`, {
@@ -168,6 +168,28 @@ export const fetchAllQuestionsAndAnswers = async (setId: string): Promise<any> =
         console.log('Error fetching all question of sets id: ' + setId + ' ' + error);
         throw error;
     }
+}
+
+export const fetchWithCustomQuery = async (query: string): Promise<any> => {
+
+    try{
+        const response = await axioss.get(`/fetch/${query}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+        if (response.data.success){
+            return ({success: true, data: response.data.data}) 
+        }   
+        else return ({ success: false})
+    }
+    catch(err){
+        console.log("Error at query fetching: ", err);
+        throw err;
+    }
+
 }
 
 

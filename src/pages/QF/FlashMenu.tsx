@@ -9,6 +9,7 @@ import { RiFinderLine } from 'react-icons/ri';
 import { useLocation, useParams } from 'react-router-dom'
 import { addLikedSet, fetchAllQuestionsAndAnswers, fetchUserData, fetchUserInfo } from '../../services/API';
 import axios from 'axios';
+import { NotificationHehe } from '../../components/Notification';
 
 export const FlashMenu = () => {
 
@@ -29,23 +30,51 @@ export const FlashMenu = () => {
     const { data } = location.state || {};
     const params = useParams();
 
-    const onAddSet = () => {
-        const user: any = JSON.parse(localStorage.getItem('user') || '')[0];
+    const [notif, setNotif] = React.useState<any>({ success: '', messsage: '' })
+    const [renderNotif, setRenderNotif] = React.useState<number>(0);
 
-        console.log('User: ', user);
-        addLikedSet(user?.user_id, data?.set_id)
-            .then(response => {
-                console.log("RES: ", response);
-            })
-    }
-
-    React.useEffect(() => {
-        const checkLiked = async () => {
+    const checkLiked = async () => {
+        try {
             const response = await axios.get(`http://localhost:3001/api/liked/check/${data?.user_id}/${data?.set_id}`);
             setIsLiked(response.data.exists)
+            console.log("Exists: ", response.data.exists);
+            if (response.data.exists) {
+                setNotif({ success: 'success', message: "Added to liked." })
+            }
+            else {
+                setNotif({ success: 'info', message: "Removed from liked." })
+            }
         }
-        checkLiked();
-    }, [])
+        catch (err) {
+            console.log("Error checking liked status: ", err);
+        }
+    }
+
+    const onAddSet = async () => {
+        try {
+            const user: any = JSON.parse(localStorage.getItem('user') || '')[0];
+            if (!user) return;
+    
+            const response = await addLikedSet(user?.user_id, data?.set_id);
+    
+            setIsLiked(response.isLiked);
+            setNotif({
+                success: response.isLiked ? 'success' : 'info', 
+                message: response.isLiked ? "Added to liked." : "Removed from liked."
+            });
+            setRenderNotif(prev => prev + 1);
+        }
+        catch (err) {
+            console.error("Error in onAddSet: ", err);
+        }
+    }
+    
+    React.useEffect(() => {
+        const fetchLikedStatus = async () => {
+            await checkLiked();
+        };
+        fetchLikedStatus();
+    }, []);
 
     React.useEffect(() => {
         fetchUserInfo(data.created_by)
@@ -73,34 +102,41 @@ export const FlashMenu = () => {
 
     return (
         <div className='flex mt-10'>
+            {
+                renderNotif > 0 && <NotificationHehe key={renderNotif} message={notif.message} success={notif.success} />
+            }
             <div className='pl-20 w-9/12  round-md bg-slate-700/12'>
 
                 <div className='items-center flex justify-between px-2'>
                     <h1 className='text-4xl w-4/6 font-bold'>{data.title}</h1>
                     <ul className='w-fit text-3xl flex items-center gap-3 px-3'>
                         <li className='cursor-pointer hover:bg-slate-700 transition-all duration-100 ease-in text-3xl px-2 py-1 border-gray-600 rounded-md border-[3px]'
-                            onClick={onAddSet}    
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onAddSet();
+                            }}
                         >
-                                {
-                                    isLiked ? <MdBookmarkAdded className='text-green-400'/> : <MdOutlineBookmarkAdd />
-                                }
+                            {
+                                isLiked ? <MdBookmarkAdded className='text-green-400' /> : <MdOutlineBookmarkAdd />
+                            }
                         </li>
-                        {headIconList.map((item, _) =>
+                        {headIconList.map((item, index) =>
                         (
-                            <li
+                            <li key={index}
                                 className='cursor-pointer hover:bg-slate-700 transition-all duration-100 ease-in text-3xl px-2 py-1 border-gray-600 rounded-md border-[3px]'
                             >{item.item}</li>
-                            
+
                         ))
                         }
                     </ul>
                 </div>
 
                 <ul className='w-full flex justify-evenly mt-32'>
-                    {typeList.map((item, _) =>
-                        <li className='select-none cursor-pointer w-1/5 flex flex-col items-center py-2 text-4xl aspect-video bg-slate-600 
-                                    rounded-lg transition-all duration-100 ease-in hover:scale-[105%] hover:shadow-md hover:shadow-cyan-500
-                                    drop-shadow-sm'>
+                    {typeList.map((item, index) =>
+                        <li key={index}
+                            className='select-none cursor-pointer w-1/5 flex flex-col items-center py-2 text-4xl aspect-video bg-slate-600 
+                                        rounded-lg transition-all duration-100 ease-in hover:scale-[105%] hover:shadow-md hover:shadow-cyan-500
+                                        drop-shadow-sm'>
                             {item.item}
                             <p className='text-[16px]'>{item.title}</p>
                         </li>
@@ -117,8 +153,9 @@ export const FlashMenu = () => {
                 <div className='mt-10'>
                     <h1 className='pl-2 font-bold text-[24px]'>Thuật ngữ trong phần này {'('}{questionList.length}{')'}</h1>
                     <ul>
-                        {questionList?.map((item, _) => (
-                            <li className='flex flex-row py-4 my-4 bg-slate-600 rounded-md'>
+                        {questionList?.map((item, index) => (
+                            <li key={index}
+                                className='flex flex-row py-4 my-4 bg-slate-600 rounded-md'>
                                 <p className='border-gray-900 border-r-2 w-5/12 p-2'>{item?.question}</p>
                                 <p className='w-7/12 pl-4 pr-2'>{item?.answers[item?.correct_answer].answer || '?'}</p>
                             </li>
