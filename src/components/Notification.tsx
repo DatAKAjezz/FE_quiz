@@ -2,7 +2,7 @@ import { Alert, Slide, Snackbar } from "@mui/material";
 import { useState } from "react";
 
 const SlideTransition = (props: any) => {
-    return <Slide {...props} direction="left" />;
+    return <Slide {...props} direction="left`   " />;
 };
 
 export const NotificationHehe = ({ message, success }: { message: string, success: string }) => {

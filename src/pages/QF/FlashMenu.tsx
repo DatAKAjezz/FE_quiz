@@ -7,14 +7,14 @@ import { MdBookmarkAdded, MdOutlineBookmarkAdd } from 'react-icons/md';
 import { PiCardsBold } from 'react-icons/pi';
 import { RiFinderLine } from 'react-icons/ri';
 import { useLocation, useParams } from 'react-router-dom'
-import { addLikedSet, fetchAllQuestionsAndAnswers, fetchUserData, fetchUserInfo } from '../../services/API';
+import { addLikedSet, fetchAllQuestionsAndAnswers, fetchUserInfo } from '../../services/API';
 import axios from 'axios';
-import { NotificationHehe } from '../../components/Notification';
+import { useSnackbar, VariantType } from 'notistack';
 
 export const FlashMenu = () => {
 
 
-    const [headIconList, setHeadIconList] = React.useState([
+    const [headIconList, _] = React.useState([
         {
             item: <FaRegShareSquare />
         },
@@ -30,15 +30,14 @@ export const FlashMenu = () => {
     const { data } = location.state || {};
     const params = useParams();
 
-    const [notif, setNotif] = React.useState<any>({ success: '', messsage: '' })
-    const [renderNotif, setRenderNotif] = React.useState<number>(0);
+    const [notif, setNotif] = React.useState<{success: VariantType, message: string}>()
 
     const checkLiked = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/api/liked/check/${data?.user_id}/${data?.set_id}`);
             setIsLiked(response.data.exists)
             console.log("Exists: ", response.data.exists);
-            if (response.data.exists) {
+            if (!response.data.exists) {
                 setNotif({ success: 'success', message: "Added to liked." })
             }
             else {
@@ -50,25 +49,25 @@ export const FlashMenu = () => {
         }
     }
 
+    const { enqueueSnackbar } = useSnackbar();
+
     const onAddSet = async () => {
         try {
             const user: any = JSON.parse(localStorage.getItem('user') || '')[0];
             if (!user) return;
-    
+
             const response = await addLikedSet(user?.user_id, data?.set_id);
-    
+
             setIsLiked(response.isLiked);
-            setNotif({
-                success: response.isLiked ? 'success' : 'info', 
-                message: response.isLiked ? "Added to liked." : "Removed from liked."
-            });
-            setRenderNotif(prev => prev + 1);
+
+            enqueueSnackbar(response.isLiked ? "Added to liked." : "Removed from liked.", {variant: response.isLiked ? 'success' : 'info'} )
+
         }
         catch (err) {
             console.error("Error in onAddSet: ", err);
         }
     }
-    
+
     React.useEffect(() => {
         const fetchLikedStatus = async () => {
             await checkLiked();
@@ -102,9 +101,7 @@ export const FlashMenu = () => {
 
     return (
         <div className='flex mt-10'>
-            {
-                renderNotif > 0 && <NotificationHehe key={renderNotif} message={notif.message} success={notif.success} />
-            }
+
             <div className='pl-20 w-9/12  round-md bg-slate-700/12'>
 
                 <div className='items-center flex justify-between px-2'>
