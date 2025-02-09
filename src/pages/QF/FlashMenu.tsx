@@ -6,7 +6,7 @@ import { LuCircleGauge } from 'react-icons/lu';
 import { MdBookmarkAdded, MdOutlineBookmarkAdd } from 'react-icons/md';
 import { PiCardsBold } from 'react-icons/pi';
 import { RiFinderLine } from 'react-icons/ri';
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { addLikedSet, fetchAllQuestionsAndAnswers, fetchUserInfo } from '../../services/API';
 import axios from 'axios';
 import { useSnackbar, VariantType } from 'notistack';
@@ -14,14 +14,15 @@ import { useSnackbar, VariantType } from 'notistack';
 export const FlashMenu = () => {
 
 
-    const [headIconList, _] = React.useState([
+    const headIconList = [
         {
-            item: <FaRegShareSquare />
+            item: <FaRegShareSquare />,
         },
         {
             item: <IoIosMore />
         }
-    ])
+    ]
+
     const [creator, setCreator] = React.useState<any>({});
     const [questionList, setQuestionList] = React.useState<any[]>([]);
     const [isLiked, setIsLiked] = React.useState<boolean>(false);
@@ -30,7 +31,13 @@ export const FlashMenu = () => {
     const { data } = location.state || {};
     const params = useParams();
 
-    const [notif, setNotif] = React.useState<{success: VariantType, message: string}>()
+    React.useEffect(() => {
+        if (data) console.log("Set Data: ", data);
+    }, [data])
+
+    const [notif, setNotif] = React.useState<{ success: VariantType, message: string }>()
+
+    const navigate = useNavigate();
 
     const checkLiked = async () => {
         try {
@@ -60,14 +67,13 @@ export const FlashMenu = () => {
 
             setIsLiked(response.isLiked);
 
-            enqueueSnackbar(response.isLiked ? "Added to liked." : "Removed from liked.", {variant: response.isLiked ? 'success' : 'info'} )
+            enqueueSnackbar(response.isLiked ? "Added to liked." : "Removed from liked.", { variant: response.isLiked ? 'success' : 'info' })
 
         }
         catch (err) {
             console.error("Error in onAddSet: ", err);
         }
     }
-
     React.useEffect(() => {
         const fetchLikedStatus = async () => {
             await checkLiked();
@@ -93,10 +99,10 @@ export const FlashMenu = () => {
     }, [params])
 
     const typeList = [
-        { item: <PiCardsBold />, title: "FlashCard" },
-        { item: <LuCircleGauge />, title: "Learning" },
-        { item: <HiOutlineClipboardDocumentList />, title: "Test" },
-        { item: <RiFinderLine />, title: "Card matching" }]
+        { item: <PiCardsBold />, title: "FlashCard", name: 'flashcard' },
+        { item: <LuCircleGauge />, title: "Learning", name: 'learning' },
+        { item: <HiOutlineClipboardDocumentList />, title: "Test", name: 'test' },
+        { item: <RiFinderLine />, title: "Card matching", name: 'card-matching' }]
     React.useEffect(() => { console.log("Forward Data: ", data) }, [data])
 
     return (
@@ -120,6 +126,7 @@ export const FlashMenu = () => {
                         {headIconList.map((item, index) =>
                         (
                             <li key={index}
+
                                 className='cursor-pointer hover:bg-slate-700 transition-all duration-100 ease-in text-3xl px-2 py-1 border-gray-600 rounded-md border-[3px]'
                             >{item.item}</li>
 
@@ -131,6 +138,9 @@ export const FlashMenu = () => {
                 <ul className='w-full flex justify-evenly mt-32'>
                     {typeList.map((item, index) =>
                         <li key={index}
+                            onClick={() => {
+                                navigate(`/ learn/${item.name}/${data.set_id}`)
+                            }}
                             className='select-none cursor-pointer w-1/5 flex flex-col items-center py-2 text-4xl aspect-video bg-slate-600 
                                         rounded-lg transition-all duration-100 ease-in hover:scale-[105%] hover:shadow-md hover:shadow-cyan-500
                                         drop-shadow-sm'>

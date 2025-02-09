@@ -16,7 +16,6 @@ export const Login = () => {
 
     const navigate = useNavigate();
 
-    const [notif, setNotif] = useState<{ message: string, success: VariantType }>();
     // dat 1
 
     const handleChange = (e: { target: { name: any; value: any; }; }) => {
@@ -36,15 +35,12 @@ export const Login = () => {
             const result = response.data;
 
             if (result.success) {
-                setNotif({ message: 'Dang nhap thanh cong...', success: 'success' })
-                enqueueSnackbar(notif?.message, { variant: notif?.success })
+                enqueueSnackbar('Dang nhap thanh cong...', { variant: 'success' })
                 localStorage.setItem('token', result.token);
                 navigate('/dashboard');
-
             }
             else {
-                setNotif({ message: 'Invalid credentials', success: 'error' })
-                enqueueSnackbar(notif?.message, { variant: notif?.success })
+                enqueueSnackbar('Invalid credentials', { variant: 'error' })
             }
         }
         catch (err) {

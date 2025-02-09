@@ -67,7 +67,7 @@ const routes = createBrowserRouter([
     errorElement: <Error />
   },
     {
-      path: '/flashsets/:flashId/:type',
+      path: '/learn/flashcard/:flashId',
       element: <FlashCard />,
       errorElement: <Error />
     }

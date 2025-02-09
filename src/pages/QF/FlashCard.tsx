@@ -13,7 +13,6 @@ import { FaHeart } from 'react-icons/fa';
 import { ImWondering2 } from 'react-icons/im';
 import { GrFormCheckmark, GrFormClose } from 'react-icons/gr';
 import { Switch } from '@mui/material';
-import { NotificationHehe } from '../../components/Notification';
 import { IoMdCloudDone } from 'react-icons/io';
 
 export const FlashCard = () => {
@@ -22,6 +21,10 @@ export const FlashCard = () => {
     const segments = location.pathname.split('/');
     const type = segments[segments.length - 1];
     const setId = segments[segments.length - 2];
+
+    useEffect(() => {
+        console.log("Location: ", location);
+    }, [location])
 
     const params = useParams();
     const navigate = useNavigate();

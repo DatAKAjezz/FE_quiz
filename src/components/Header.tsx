@@ -10,7 +10,6 @@ import { GrAchievement, GrAdd } from 'react-icons/gr';
 import { LuSunMedium } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import { IoMdNotifications } from 'react-icons/io';
-import { NotificationHehe } from './Notification';
 import { PiCardsBold } from 'react-icons/pi';
 import { MdOutlineQuiz } from 'react-icons/md';
 
@@ -31,8 +30,7 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
   const user = JSON.parse(localStorage.getItem('user') ?? '{}')[0];
   const token = localStorage.getItem('token');
 
-  const [logOut, setLogOut] = useState<boolean>(false);
-  const [renderNotif, setRenderNotif] = useState<number>(0);
+  // const [logOut, setLogOut] = useState<boolean>(false);
 
   const menuItems: MenuItem[] = [
     { icon: <RiHome9Line className="text-2xl icon" />, label: 'Trang chủ', path: '/' },
@@ -50,8 +48,7 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
       label: 'Đăng xuất',
       onClick: () => {
         logout();
-        setLogOut(true);
-        setRenderNotif(prev => prev + 1);
+        // setLogOut(true);
         setTimeout(() => { navigate('/login'); }, 500)
       }
     }
@@ -151,8 +148,6 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
 
   return (
     <>
-
-      {logOut && <NotificationHehe key={renderNotif} message='Logging out...' success='info' />}
 
       <div className="fixed shadow-lg flex items-center justify-between top-0 z-20 bg-slate-900 w-full py-3 px-5">
         <HiMenu

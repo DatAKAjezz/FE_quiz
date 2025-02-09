@@ -1,3 +1,4 @@
+import { enqueueSnackbar } from 'notistack';
 import React, { createContext, useContext, useState } from 'react'
 
 interface AuthContextType {
@@ -21,6 +22,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode }> = ({ children 
         localStorage.removeItem('image_path')
         localStorage.removeItem('user');
         setIsAuthenticated(false);
+        enqueueSnackbar('Logging out...', {variant: 'info'})
     }
 
     return(
