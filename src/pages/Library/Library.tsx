@@ -13,15 +13,13 @@ export const Library = () => {
   const navigate = useNavigate();
 
   const [notif, setNotif] = useState<{ message: string, success: string }>({ message: '', success: '' });
-  // const [renderNotif, setRenderNotif] = useState<number>(0);
 
   useEffect(() => {
     if (!token) {
       setNotif({ message: 'Bạn cần đăng nhập để tới Library.', success: 'warning' })
-      setTimeout(() => {navigate('/login')}, 1100)
+      setTimeout(() => {navigate('/auth/login')}, 1100)
       return;
     }
-
 
     fetchLibraryData(token)
       .then(response => {
@@ -33,7 +31,7 @@ export const Library = () => {
       .catch(error => {
         setNotif({message: error.message, success:'error'})
         localStorage.removeItem('token');
-        setTimeout(() => {navigate('/login')}, 800)
+        setTimeout(() => {navigate('/auth/login')}, 800)
       })
 
   }, [token])
@@ -53,7 +51,7 @@ export const Library = () => {
               <div className='w-full flex justify-evenly mt-8 cursor-pointer'>
                 {
                   history.map((item, _) => (
-                    <ThumbSet click={() => {navigate(`/flashsets/${item.set_id}/menu`,{state: {data: item}} )}} 
+                    <ThumbSet key = {_} click={() => {navigate(`/flashsets/${item.set_id}/menu`,{state: {data: item}} )}} 
                         data = {item} class = 'bg-slate-600 relative rounded-md w-1/4 min-h-48'/>
                   ))
                 }

@@ -49,7 +49,7 @@ const Header = ({ onDrawerChange }: { onDrawerChange: (isOpen: boolean) => void 
       onClick: () => {
         logout();
         // setLogOut(true);
-        setTimeout(() => { navigate('/login'); }, 500)
+        setTimeout(() => { navigate('/auth/login'); }, 500)
       }
     }
   ];

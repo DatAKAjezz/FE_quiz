@@ -1,13 +1,5 @@
-import axios from 'axios'
+import axioss from '../config/apiClient'
 import { LibraryData } from './types'
-
-const axioss = axios.create({
-    baseURL: 'http://localhost:3001',
-    headers: {
-        "Content-Type": 'application/json'
-    },
-    timeout: 30000,
-})
 
 export const fetchLibraryData = (token: string): Promise<LibraryData> => {
     return axioss.get('/library/history', {

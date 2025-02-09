@@ -30,7 +30,7 @@ export const Signup = () => {
             return;
         }
         try {
-            const response = await fetch('http://localhost:3001/signup', {
+            const response = await fetch('http://localhost:3001/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -38,7 +38,7 @@ export const Signup = () => {
             const result = await response.json();
             if (result.success) {
                 alert('Đăng ký thành công!');
-                navigate('/login');
+                navigate('/auth/login');
             } else {
                 alert(result.message || 'Đăng ký thất bại. Vui lòng thử lại.');
             }
@@ -64,13 +64,13 @@ export const Signup = () => {
                 <div className="w-fit flex pl-24 pt-20 pb-16 text-3xl font-bold">
                     <p
                         className="w-fit rounded-md px-5 py-3 cursor-pointer"
-                        onClick={() => navigate('/login')}
+                        onClick={() => navigate('/auth/login')}
                     >
                         Log in
                     </p>
                     <p
                         className="w-fit bg-sky-700 text-white rounded-md ml-5 px-5 py-3 cursor-pointer"
-                        onClick={() => navigate('/signup')}
+                        onClick={() => navigate('/auth/signup')}
                     >
                         Sign up
                     </p>

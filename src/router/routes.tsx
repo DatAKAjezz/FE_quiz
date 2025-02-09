@@ -57,12 +57,12 @@ const routes = createBrowserRouter([
     ]
   },
   {
-    path: '/login',
+    path: '/auth/login',
     element: <Login />,
     errorElement: <Error />
   },
   {
-    path: '/signup',
+    path: '/auth/signup',
     element: <Signup />,
     errorElement: <Error />
   },

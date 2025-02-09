@@ -27,7 +27,7 @@ export const Login = () => {
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3001/login', formData,
+            const response = await axios.post('http://localhost:3001/auth/login', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
                 })
@@ -59,8 +59,8 @@ export const Login = () => {
                     onClick={() => { navigate('/') }}
                     className='absolute right-3 top-3 hover:bg-zinc-200 cursor-pointer rounded-md text-3xl' />
                 <div className='w-fit flex pl-24 pt-20 pb-16 text-3xl font-bold'>
-                    <p className='w-fit bg-sky-700 rounded-md px-5 py-3 text-white cursor-pointer' onClick={() => { navigate('/login') }}>Log in</p>
-                    <p className='w-fit ml-5  px-5 py-3 cursor-pointer' onClick={() => { navigate('/signup') }}>Sign up</p>
+                    <p className='w-fit bg-sky-700 rounded-md px-5 py-3 text-white cursor-pointer' onClick={() => { navigate('/auth/login') }}>Log in</p>
+                    <p className='w-fit ml-5  px-5 py-3 cursor-pointer' onClick={() => { navigate('/auth/signup') }}>Sign up</p>
                 </div>
                 <form onSubmit={handleSubmit} className='submit-container mx-auto w-9/12 rounded-md flex flex-col h-fit'>
                     <div>
